@@ -1,4 +1,4 @@
-const notAllowedPathes = ["/reel/"];
+const notAllowedPathes = ["/reel/", "/shorts/"];
 
 const isInAllowedPathes = path => !notAllowedPathes.some(p => path.includes(p));
 
