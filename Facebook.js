@@ -29,50 +29,108 @@
             '/reels',
             '/reel'
         ];
-        /**
-         * Checks if the given path is allowed (contains any allowed substring and no forbidden substring).
-         * @param {string} path
-         * @returns {boolean}
-         */
         function isAllowedPath(path) {
             return allowedPaths.some(p => path.includes(p)) && !forbiddenPaths.some(p => path.includes(p));
         }
-        /**
-         * Determines if the user is logged in by checking for login-related elements.
-         * @returns {boolean}
-         */
         function isUserLoggedIn() {
             const hasLoginForm = !!document.querySelector('form[action*="login"]');
             const hasLoginInputs = !!document.querySelector('input[name="email"]') && !!document.querySelector('input[name="pass"]');
             const hasLoginButton = !!document.querySelector('button[name="login"]');
             const hasCreateAccountButton = !!document.querySelector('div[data-testid="open-registration-form-button"]');
-            // If any login elements are present, user is not logged in
             return !(hasLoginForm || hasLoginInputs || hasLoginButton || hasCreateAccountButton);
         }
         /**
-         * Main logic to filter and redirect Facebook navigation.
+         * Show modal to force user to copy URL before redirect
          */
+        function showCopyModalAndRedirect(urlToCopy, redirectUrl) {
+            // Create overlay/modal
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = 0;
+            overlay.style.left = 0;
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.background = 'rgba(0,0,0,0.8)';
+            overlay.style.zIndex = '99999';
+            overlay.style.display = 'flex';
+            overlay.style.flexDirection = 'column';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+
+            // Modal content
+            const modal = document.createElement('div');
+            modal.style.background = '#fff';
+            modal.style.padding = '2em';
+            modal.style.borderRadius = '8px';
+            modal.style.textAlign = 'center';
+
+            const msg = document.createElement('div');
+            msg.textContent = 'Click the button to copy the link and continue!';
+            msg.style.marginBottom = '1em';
+
+            const btn = document.createElement('button');
+            btn.textContent = 'Copy & Continue';
+            btn.style.fontSize = '1.2em';
+            btn.style.padding = '0.5em 2em';
+            btn.style.cursor = 'pointer';
+
+            modal.appendChild(msg);
+            modal.appendChild(btn);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+
+            // Prevent all other interaction
+            document.body.style.pointerEvents = 'none';
+            overlay.style.pointerEvents = 'auto';
+
+            // Clean up and redirect
+            function cleanupAndRedirect(success) {
+                document.body.style.pointerEvents = '';
+                overlay.remove();
+                window.location = redirectUrl;
+            }
+
+            // Copy logic
+            btn.onclick = function() {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(urlToCopy)
+                        .then(() => cleanupAndRedirect(true))
+                        .catch(() => {
+                            msg.textContent = 'Copy failed. Redirecting...';
+                            setTimeout(() => cleanupAndRedirect(false), 1500);
+                        });
+                } else {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = urlToCopy;
+                    textarea.setAttribute('readonly', '');
+                    textarea.style.position = 'absolute';
+                    textarea.style.left = '-9999px';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        cleanupAndRedirect(true);
+                    } catch (err) {
+                        msg.textContent = 'Copy failed. Redirecting...';
+                        setTimeout(() => cleanupAndRedirect(false), 1500);
+                    }
+                    document.body.removeChild(textarea);
+                }
+            };
+
+            // If user doesn't click within a timeout, force redirect
+            setTimeout(() => {
+                msg.textContent = 'You must copy to continue. Redirecting automatically...';
+                setTimeout(() => cleanupAndRedirect(false), 2000);
+            }, 15000); // 15s to click, then force
+        }
+
         function applyFacebookFilter() {
             const url = window.location.href.split('?')[0];
             // Redirect if on a forbidden path
             if (forbiddenPaths.some(p => url.includes(p))) {
-                const tempTextArea = document.createElement("textarea");
-                tempTextArea.value = document.URL;
-                document.body.appendChild(tempTextArea);
-                tempTextArea.select();
-                try {
-                  document.execCommand('copy');
-                  window.location = 'https://en1.savefrom.net/9-how-to-download-facebook-video-6CY.html';
-                //   console.log('Text copied to clipboard successfully!');
-                } catch (err) {
-                    navigator.clipboard.writeText(document.URL).finally(() => {
-                        window.location = 'https://en1.savefrom.net/9-how-to-download-facebook-video-6CY.html';
-                    });
-                //   console.error('Failed to copy text: ', err);
-                } finally {
-                  document.body.removeChild(tempTextArea);
-                  return;
-                }
+                showCopyModalAndRedirect(document.URL, 'https://en1.savefrom.net/9-how-to-download-facebook-video-6CY.html');
+                return;
             }
             // Prevent infinite redirect loop if already on profile page
             if (url.includes('profile.php')) {
