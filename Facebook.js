@@ -122,7 +122,7 @@
             setTimeout(() => {
                 msg.textContent = 'You must copy to continue. Redirecting automatically...';
                 setTimeout(() => cleanupAndRedirect(false), 2000);
-            }, 15000); // 15s to click, then force
+            }, 10000); // 10s to click, then force
         }
 
         function applyFacebookFilter() {
