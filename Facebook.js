@@ -56,10 +56,23 @@
             const url = window.location.href.split('?')[0];
             // Redirect if on a forbidden path
             if (forbiddenPaths.some(p => url.includes(p))) {
-                navigator.clipboard.writeText(document.URL).finally(() => {
-                    window.location = 'https://en1.savefrom.net/9-how-to-download-facebook-video-6CY.html';
-                });
-                return;
+                const tempTextArea = document.createElement("textarea");
+                tempTextArea.value = document.URL;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                try {
+                  document.execCommand('copy');
+                  window.location = 'https://en1.savefrom.net/9-how-to-download-facebook-video-6CY.html';
+                //   console.log('Text copied to clipboard successfully!');
+                } catch (err) {
+                    navigator.clipboard.writeText(document.URL).finally(() => {
+                        window.location = 'https://en1.savefrom.net/9-how-to-download-facebook-video-6CY.html';
+                    });
+                //   console.error('Failed to copy text: ', err);
+                } finally {
+                  document.body.removeChild(tempTextArea);
+                  return;
+                }
             }
             // Prevent infinite redirect loop if already on profile page
             if (url.includes('profile.php')) {
