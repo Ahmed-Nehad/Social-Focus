@@ -259,7 +259,7 @@ function showOverlay(message, onContinue = closeCurrentPage, onCancel = closeCur
     messageElem.className = 'timealert-js-overlay-message-2024';
     messageElem.innerHTML = message;
     messageElem.style.color = 'white';
-    messageElem.style.fontSize = '2.5rem';
+    messageElem.style.fontSize = '2rem';
     messageElem.style.fontWeight = 'bold';
     messageElem.style.textAlign = 'center';
     messageElem.style.marginBottom = '2rem';
@@ -275,7 +275,7 @@ function showOverlay(message, onContinue = closeCurrentPage, onCancel = closeCur
     const continueBtn = document.createElement('button');
     continueBtn.className = 'timealert-js-overlay-continue-btn-2024';
     continueBtn.textContent = 'Continue';
-    continueBtn.style.fontSize = '2rem';
+    continueBtn.style.fontSize = '1.5rem';
     continueBtn.style.padding = '0';
     continueBtn.style.margin = '0 1rem';
     continueBtn.style.border = 'none';
@@ -295,7 +295,7 @@ function showOverlay(message, onContinue = closeCurrentPage, onCancel = closeCur
     const cancelBtn = document.createElement('button');
     cancelBtn.className = 'timealert-js-overlay-cancel-btn-2024';
     cancelBtn.textContent = 'Cancel';
-    cancelBtn.style.fontSize = '2rem';
+    cancelBtn.style.fontSize = '1.5rem';
     cancelBtn.style.padding = '0';
     cancelBtn.style.margin = '0 1rem';
     cancelBtn.style.border = 'none';
