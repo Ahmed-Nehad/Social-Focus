@@ -62,13 +62,13 @@ let lastCheckedTimestamp = getLS('lastCheckedTimestamp') || Date.now();
 setLS('lastCheckedTimestamp', lastCheckedTimestamp);
 
 // Break time in seconds (how long a break should last)
-let breakTime = (60 * 10); // 10 minutes
+let breakTime = (60 * 15); // 15 minutes
 
 // Maximum session time in seconds before a break is recommended
 let maxSessionTime = (60 * 12); // 12 minutes
 
 // How often (in number of alerts per session) to show session alert
-let sessionAlertFrequency = 2;
+let sessionAlertFrequency = 1;
 
 // Interval (in ms) for checking time and showing alerts
 let checkInterval = (1000 * 10); // 10 secs
@@ -143,7 +143,6 @@ function timeCheck() {
                 اليوتيوب <span style="color: #ff0000; font-weight: bold;">مقفول</span> دلوقتي عشان مصلحتك!<br>
                 <span style="font-size: 2em;">🚫📺</span><br>
                 <i>حتى الخوارزمية محتاجة تنام أحياناً...</i><br><br>
-                <span style="font-size: 1.2em;">قوم اتحرك، اشرب مية، أو جرّب تعمل صوت قطة! 🐱</span><br><br>
                 <span style="font-size: 0.9em; color: #aaa;">(هنرجعلك اليوتيوب بعد البريك، وعد!)</span>`
             );
         }
@@ -259,7 +258,7 @@ function showOverlay(message, onContinue = closeCurrentPage, onCancel = closeCur
     messageElem.className = 'timealert-js-overlay-message-2024';
     messageElem.innerHTML = message;
     messageElem.style.color = 'white';
-    messageElem.style.fontSize = '2rem';
+    messageElem.style.fontSize = '1.5rem';
     messageElem.style.fontWeight = 'bold';
     messageElem.style.textAlign = 'center';
     messageElem.style.marginBottom = '2rem';
